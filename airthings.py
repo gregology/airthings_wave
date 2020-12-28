@@ -153,7 +153,7 @@ class AirthingsWaveDetect:
     def find_devices(self):
         # Scan for devices and try to figure out if it is an airthings device.
         self.adapter.start(reset_on_start=False)
-        devices = self.adapter.scan(timeout=3)
+        devices = self.adapter.scan(timeout=30)
         self.adapter.stop()
 
         for device in devices:
@@ -161,7 +161,7 @@ class AirthingsWaveDetect:
             _LOGGER.debug("connecting to {}".format(mac))
             try:
                 self.adapter.start(reset_on_start=False)
-                dev = self.adapter.connect(mac, 3)
+                dev = self.adapter.connect(mac, 30)
                 _LOGGER.debug("Connected")
                 try:
                     data = dev.char_read(manufacturer_characteristics.uuid)
@@ -188,7 +188,7 @@ class AirthingsWaveDetect:
             device = AirthingsDeviceInfo(serial_nr=mac)
             try:
                 self.adapter.start(reset_on_start=False)
-                dev = self.adapter.connect(mac, 3)
+                dev = self.adapter.connect(mac, 30)
                 for characteristic in device_info_characteristics:
                     try:
                         data = dev.char_read(characteristic.uuid)
@@ -208,7 +208,7 @@ class AirthingsWaveDetect:
         for mac in self.airthing_devices:
             try:
                 self.adapter.start(reset_on_start=False)
-                dev = self.adapter.connect(mac, 3)
+                dev = self.adapter.connect(mac, 30)
                 characteristics = dev.discover_characteristics()
                 sensor_characteristics =  []
                 for characteristic in characteristics.values():
@@ -227,7 +227,7 @@ class AirthingsWaveDetect:
             for mac, characteristics in self.sensors.items():
                 try:
                     self.adapter.start(reset_on_start=False)
-                    dev = self.adapter.connect(mac, 3)
+                    dev = self.adapter.connect(mac, 30)
                     for characteristic in characteristics:
                         try:
                             data = dev.char_read_handle("0x{:04x}".format(characteristic.handle))
